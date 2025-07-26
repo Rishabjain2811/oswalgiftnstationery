@@ -279,8 +279,8 @@ sendBtn.addEventListener('click', function() {
 });
 
 // Smooth scroll for nav links
-const navLinks = document.querySelectorAll('.nav-links a');
-navLinks.forEach(link => {
+const navLinkElements = document.querySelectorAll('.nav-links a');
+navLinkElements.forEach(link => {
   link.addEventListener('click', function(e) {
     const href = this.getAttribute('href');
     if (href.startsWith('#')) {
@@ -331,4 +331,43 @@ const contactForm = document.getElementById('contact-form');
 contactForm.addEventListener('submit', function(e) {
   e.preventDefault();
   contactForm.innerHTML = '<p style="color:var(--cta-olive);font-weight:600;font-size:1.1rem;">Thank you for reaching out! We will get back to you soon.</p>';
+});
+
+// Mobile Navigation
+const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+const navLinks = document.getElementById('nav-links');
+const dropdowns = document.querySelectorAll('.dropdown');
+
+// Toggle mobile menu
+mobileMenuToggle.addEventListener('click', () => {
+  mobileMenuToggle.classList.toggle('active');
+  navLinks.classList.toggle('active');
+});
+
+// Handle dropdown toggles on mobile
+dropdowns.forEach(dropdown => {
+  const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
+  
+  dropdownToggle.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768) {
+      e.preventDefault();
+      dropdown.classList.toggle('active');
+    }
+  });
+});
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+  if (!mobileMenuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+    mobileMenuToggle.classList.remove('active');
+    navLinks.classList.remove('active');
+  }
+});
+
+// Close mobile menu when clicking on a link
+navLinks.addEventListener('click', (e) => {
+  if (e.target.tagName === 'A' && !e.target.classList.contains('dropdown-toggle')) {
+    mobileMenuToggle.classList.remove('active');
+    navLinks.classList.remove('active');
+  }
 });
