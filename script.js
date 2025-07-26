@@ -333,41 +333,60 @@ contactForm.addEventListener('submit', function(e) {
   contactForm.innerHTML = '<p style="color:var(--cta-olive);font-weight:600;font-size:1.1rem;">Thank you for reaching out! We will get back to you soon.</p>';
 });
 
-// Mobile Navigation
-const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-const navLinks = document.getElementById('nav-links');
-const dropdowns = document.querySelectorAll('.dropdown');
+// Mobile Navigation - Initialize first
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const navLinks = document.getElementById('nav-links');
+  const dropdowns = document.querySelectorAll('.dropdown');
 
-// Toggle mobile menu
-mobileMenuToggle.addEventListener('click', () => {
-  mobileMenuToggle.classList.toggle('active');
-  navLinks.classList.toggle('active');
-});
+  console.log('Mobile menu elements:', { mobileMenuToggle, navLinks, dropdowns });
 
-// Handle dropdown toggles on mobile
-dropdowns.forEach(dropdown => {
-  const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
-  
-  dropdownToggle.addEventListener('click', (e) => {
-    if (window.innerWidth <= 768) {
+  // Toggle mobile menu
+  if (mobileMenuToggle && navLinks) {
+    mobileMenuToggle.addEventListener('click', (e) => {
       e.preventDefault();
-      dropdown.classList.toggle('active');
+      e.stopPropagation();
+      console.log('Hamburger clicked');
+      mobileMenuToggle.classList.toggle('active');
+      navLinks.classList.toggle('active');
+      console.log('Menu classes:', {
+        toggle: mobileMenuToggle.classList.contains('active'),
+        nav: navLinks.classList.contains('active')
+      });
+    });
+  }
+
+  // Handle dropdown toggles on mobile
+  dropdowns.forEach(dropdown => {
+    const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
+    
+    if (dropdownToggle) {
+      dropdownToggle.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          dropdown.classList.toggle('active');
+        }
+      });
     }
   });
-});
 
-// Close mobile menu when clicking outside
-document.addEventListener('click', (e) => {
-  if (!mobileMenuToggle.contains(e.target) && !navLinks.contains(e.target)) {
-    mobileMenuToggle.classList.remove('active');
-    navLinks.classList.remove('active');
-  }
-});
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (mobileMenuToggle && navLinks && 
+        !mobileMenuToggle.contains(e.target) && 
+        !navLinks.contains(e.target)) {
+      mobileMenuToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+    }
+  });
 
-// Close mobile menu when clicking on a link
-navLinks.addEventListener('click', (e) => {
-  if (e.target.tagName === 'A' && !e.target.classList.contains('dropdown-toggle')) {
-    mobileMenuToggle.classList.remove('active');
-    navLinks.classList.remove('active');
+  // Close mobile menu when clicking on a link
+  if (navLinks) {
+    navLinks.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A' && !e.target.classList.contains('dropdown-toggle')) {
+        mobileMenuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+      }
+    });
   }
 });
