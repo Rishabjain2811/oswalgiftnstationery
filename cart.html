@@ -12,7 +12,7 @@
 <body>
   <nav class="navbar minimalist-nav">
     <div class="nav-logo">
-      <img src="logo.jpg" alt="OSWAL Logo" class="logo-img" />
+      <img src="colors logo.jpg" alt="OSWAL Logo" class="logo-img" />
       <span class="brand">OSWAL GIFT N STATIONERY</span>
     </div>
     <ul class="nav-links">
@@ -42,16 +42,25 @@
       <li><a href="cart.html" class="cart-link"><span class="cart-icon">🛒</span><span id="cart-count">0</span></a></li>
     </ul>
   </nav>
+  
   <main>
     <section class="cart-section" id="cart">
-      <h2 class="section-title">Your Cart</h2>
-      <div id="cart-items"><!-- Rendered by cart.js --></div>
-      <button id="send-whatsapp" class="cta-btn">Send to WhatsApp</button>
+      <div class="cart-container">
+        <h2 class="section-title">Your Shopping Cart</h2>
+        <div id="cart-items" class="cart-items-container"><!-- Rendered by cart.js --></div>
+        <div class="cart-actions">
+          <button id="send-whatsapp" class="cta-btn whatsapp-btn">
+            <span>📱</span> Send to WhatsApp
+          </button>
+        </div>
+      </div>
     </section>
   </main>
+  
   <footer>
     <p class="footer-copy">&copy; 2024 OSWAL GIFT N STATIONERY</p>
   </footer>
+  
   <script src="cart.js"></script>
 </body>
 </html> 
