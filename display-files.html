@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display Files - OSWAL GIFT N STATIONERY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar minimalist-nav">
+    <div class="nav-logo">
+      <img src="logo.jpg" alt="OSWAL Logo" class="logo-img" />
+      <span class="brand">OSWAL GIFT N STATIONERY</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html#home">Home</a></li>
+      <li><a href="index.html#featured">Featured</a></li>
+      <li class="dropdown">
+        <a href="#products" class="dropdown-toggle">Products</a>
+        <ul class="dropdown-menu">
+          <li><a href="ring-binders.html">Ring Binders</a></li>
+          <li><a href="separators.html">Separators</a></li>
+          <li><a href="display-files.html">Display Files</a></li>
+          <li><a href="signage-holders.html">Signage Holders</a></li>
+          <li><a href="clip-files.html">Clip Files</a></li>
+          <li><a href="conference-folders.html">Conference Folders</a></li>
+          <li><a href="card-holders.html">Card Holders</a></li>
+          <li><a href="document-bags.html">Document Bags</a></li>
+          <li><a href="loose-paper-holders.html">Loose Paper Holders</a></li>
+          <li><a href="expanding-files.html">Expanding Files</a></li>
+          <li><a href="button-files.html">Button Files</a></li>
+          <li><a href="display-books.html">Display Books</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#testimonials">Testimonials</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="links.html">Links</a></li>
+      <li><a href="index.html#cart" class="cart-link"><span class="cart-icon">🛒</span><span id="cart-count">0</span></a></li>
+    </ul>
+  </nav>
+  <header class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Display Files</h1>
+      <p class="hero-tagline">Professional display files for organized document presentation</p>
+    </div>
+  </header>
+  <main>
+    <section class="products-section">
+      <div class="section-header">
+        <h2 class="section-title">Display Files Collection</h2>
+        <a href="index.html#products" class="cta-btn">Back to All Products</a>
+      </div>
+      <div id="display-files-products" class="products-grid">
+        <!-- Products will be rendered by display-files.js -->
+      </div>
+    </section>
+    <section class="cart-section" id="cart">
+      <h2 class="section-title">Your Cart</h2>
+      <div id="cart-items"><!-- Rendered by display-files.js --></div>
+      <button id="send-whatsapp" class="cta-btn">Send to WhatsApp</button>
+    </section>
+  </main>
+  <footer>
+    <p class="footer-copy">&copy; 2024 OSWAL GIFT N STATIONERY</p>
+  </footer>
+  <script src="display-files.js"></script>
+</body>
+</html> 

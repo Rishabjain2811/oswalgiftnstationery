@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Category | OSWAL GIFT N STATIONERY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar minimalist-nav">
+    <div class="nav-logo">
+      <img src="logoooo.png" alt="OSWAL Logo" class="logo-img" />
+      <span class="brand">OSWAL GIFT N STATIONERY</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html#home">Home</a></li>
+      <li><a href="index.html#featured">Featured</a></li>
+      <li class="dropdown">
+        <a href="#products" class="dropdown-toggle">Products</a>
+        <ul class="dropdown-menu">
+          <li><a href="button-files.html">Button Files</a></li>
+          <li><a href="clip-files.html">Clip Files</a></li>
+          <li><a href="display-books.html">Display Books</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#testimonials">Testimonials</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="links.html">Links</a></li>
+      <li><a href="index.html#cart" class="cart-link"><span class="cart-icon">🛒</span><span id="cart-count">0</span></a></li>
+    </ul>
+  </nav>
+  <header class="hero-section" id="category-hero">
+    <div class="hero-content">
+      <a href="index.html#products" class="cta-btn">← Back to All Products</a>
+      <h1 class="hero-title" id="category-title">Category</h1>
+    </div>
+  </header>
+  <main>
+    <section class="products-section" id="category-products-section">
+      <h2 class="section-title" id="category-section-title">Products</h2>
+      <div id="category-products"><!-- Rendered by category.js --></div>
+    </section>
+    <section class="cart-section" id="cart">
+      <h2 class="section-title">Your Cart</h2>
+      <div id="cart-items"><!-- Rendered by category.js --></div>
+      <button id="send-whatsapp" class="cta-btn">Send to WhatsApp</button>
+    </section>
+  </main>
+  <footer>
+    <p class="footer-copy">&copy; 2024 OSWAL GIFT N STATIONERY</p>
+  </footer>
+  <script src="category.js"></script>
+</body>
+</html> 
