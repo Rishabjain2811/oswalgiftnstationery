@@ -897,6 +897,7 @@ footer {
   background: none;
   border: none;
   gap: 4px;
+  z-index: 1000;
 }
 
 .mobile-menu-toggle span {
@@ -924,6 +925,7 @@ footer {
   .navbar {
     padding: 1rem;
     position: relative;
+    z-index: 1000;
   }
   
   .nav-logo {
@@ -941,33 +943,36 @@ footer {
   }
   
   .mobile-menu-toggle {
-    display: flex;
+    display: flex !important;
+    position: relative;
+    z-index: 1001;
   }
   
   .nav-links {
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
+    bottom: 0;
     background: var(--bg-white);
     flex-direction: column;
     gap: 0;
-    padding: 1rem 0;
+    padding: 5rem 0 2rem 0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     border-top: 1px solid var(--accent-beige);
-    transform: translateY(-100%);
+    transform: translateX(-100%);
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
-    max-height: 0;
-    overflow: hidden;
+    max-height: 100vh;
+    overflow-y: auto;
+    z-index: 999;
   }
   
   .nav-links.active {
-    transform: translateY(0);
+    transform: translateX(0);
     opacity: 1;
     visibility: visible;
-    max-height: 500px;
   }
   
   .nav-links li {
