@@ -83,19 +83,41 @@ function updateCartCount() {
 }
 function addToCart(productId, category) {
   const product = findProduct(productId, category);
+  if (!product) {
+    console.error('Product not found:', productId, category);
+    return;
+  }
+  
   const quantityInput = document.querySelector(`input[data-id="${productId}"][data-cat="${category}"]`);
-  const quantity = parseInt(quantityInput.value);
+  const quantity = parseInt(quantityInput?.value || 1);
+  
   let cart = getCart();
   const existingItem = cart.find(item => item.id === productId && item.category === category);
+  
   if (existingItem) {
     existingItem.quantity += quantity;
   } else {
-    cart.push({ id: product.id, name: product.name, quantity, category });
+    cart.push({ 
+      id: product.id, 
+      name: product.name, 
+      quantity: quantity, 
+      category: category 
+    });
   }
+  
   setCart(cart);
   updateCartCount();
-  quantityInput.value = 1;
+  renderCart(); // Update cart display
+  
+  // Reset quantity input
+  if (quantityInput) {
+    quantityInput.value = 1;
+  }
+  
+  // Show success message
+  showCartNotification(`${product.name} added to cart!`);
 }
+
 function findProduct(productId, category) {
   for (const cat of productCategories) {
     if (cat.name === category) {
@@ -224,59 +246,57 @@ function addProductCardListeners(container, products) {
   });
 }
 
-function renderCart() {
-  const cartSection = document.querySelector('.cart-section');
-  const cartItemsDiv = document.getElementById('cart-items');
-  const cart = getCart();
-  if (cart.length === 0) {
-    cartItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
-    cartSection.classList.add('active');
-    return;
-  }
-  cartItemsDiv.innerHTML = cart.map(item => `
-    <div class="cart-item">
-      <span class="cart-item-title">${item.name}</span>
-      <span class="cart-item-qty">x${item.quantity}</span>
-      <button class="cart-item-remove" data-id="${item.id}">&times;</button>
-    </div>
-  `).join('');
-  cartSection.classList.add('active');
-  // Remove item
-  cartItemsDiv.querySelectorAll('.cart-item-remove').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const id = parseInt(this.getAttribute('data-id'));
-      removeFromCart(id);
-    });
-  });
+// Contact form (no backend, just show thank you)
+const contactForm = document.getElementById('contact-form');
+contactForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  contactForm.innerHTML = '<p style="color:var(--cta-olive);font-weight:600;font-size:1.1rem;">Thank you for reaching out! We will get back to you soon.</p>';
+});
+
+// Cart functionality for main page
+function showCartNotification(message) {
+  // Create notification element
+  const notification = document.createElement('div');
+  notification.className = 'cart-notification';
+  notification.textContent = message;
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--bold-green);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Animate in
+  setTimeout(() => {
+    notification.style.transform = 'translateX(0)';
+  }, 100);
+  
+  // Remove after 3 seconds
+  setTimeout(() => {
+    notification.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 300);
+  }, 3000);
 }
 
-// Cart nav link
-const cartLink = document.querySelector('.cart-link');
-cartLink.addEventListener('click', function(e) {
-  e.preventDefault();
-  window.location.href = 'cart.html'; // Redirect to cart.html
-});
-// Hide cart section on outside click
-window.addEventListener('click', function(e) {
-  const cartSection = document.querySelector('.cart-section');
-  if (cartSection.classList.contains('active') && !cartSection.contains(e.target) && !cartLink.contains(e.target)) {
-    cartSection.classList.remove('active');
-  }
-});
+// Reset cart after page refresh (optional - uncomment if you want this behavior)
+function resetCartOnRefresh() {
+  // Uncomment the next line if you want cart to reset on refresh
+  localStorage.removeItem('oswal_cart');
+}
 
-// WhatsApp send
-const sendBtn = document.getElementById('send-whatsapp');
-sendBtn.addEventListener('click', function() {
-  const cart = getCart();
-  if (cart.length === 0) return;
-  const business = 'OSWAL GIFT N STATIONERY';
-  let message = `Hello, I would like to order the following products from ${business}:%0A%0A`;
-  cart.forEach(item => {
-    message += `*${item.name}* (x${item.quantity})%0A`;
-  });
-  const url = `https://wa.me/919841137922?text=${message}`;
-  window.open(url, '_blank');
-});
+// Call this on page load
+resetCartOnRefresh();
 
 // Smooth scroll for nav links
 const navLinkElements = document.querySelectorAll('.nav-links a');
@@ -308,7 +328,7 @@ window.addEventListener('load', setActiveNavLink);
 
 // Optionally, animate sections/cards on scroll
 function revealOnScroll() {
-  const reveals = document.querySelectorAll('section, .product-card, .testimonial-card, .cart-section, .about-section, .contact-section');
+  const reveals = document.querySelectorAll('section, .product-card, .testimonial-card, .about-section, .contact-section');
   const windowHeight = window.innerHeight;
   reveals.forEach(el => {
     const top = el.getBoundingClientRect().top;
@@ -326,9 +346,44 @@ renderFeaturedProducts();
 renderProductCategories();
 updateCartCount();
 
-// Contact form (no backend, just show thank you)
-const contactForm = document.getElementById('contact-form');
-contactForm.addEventListener('submit', function(e) {
-  e.preventDefault();
-  contactForm.innerHTML = '<p style="color:var(--cta-olive);font-weight:600;font-size:1.1rem;">Thank you for reaching out! We will get back to you soon.</p>';
+function sendWhatsApp() {
+  const cart = getCart();
+  if (cart.length === 0) {
+    alert('Your cart is empty!');
+    return;
+  }
+  const message = `Hello! I'm interested in the following products from OSWAL GIFT N STATIONERY:\n\n${cart.map(item => `• ${item.name} - Quantity: ${item.quantity}`).join('\n')}\n\nPlease provide pricing and availability.`;
+  const whatsappUrl = `https://wa.me/919841137922?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+}
+
+function directWhatsApp() {
+  const cart = getCart();
+  if (cart.length === 0) {
+    alert('Your cart is empty!');
+    return;
+  }
+  const message = `Hello! I would like to order the following products:\n\n${cart.map(item => `• ${item.name} - Quantity: ${item.quantity}`).join('\n')}\n\nPlease provide pricing and availability.`;
+  const whatsappUrl = `https://wa.me/919841137768?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+}
+
+// Initialize cart functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const sendWhatsAppBtn = document.getElementById('send-whatsapp');
+  const directWhatsAppBtn = document.getElementById('direct-whatsapp');
+  
+  if (sendWhatsAppBtn) {
+    sendWhatsAppBtn.addEventListener('click', sendWhatsApp);
+  }
+  
+  if (directWhatsAppBtn) {
+    directWhatsAppBtn.addEventListener('click', directWhatsApp);
+  }
+  
+  // Initialize cart
+  renderCart();
+  updateCartCount();
 });
+
+// Cart link navigation is handled by the href attribute in HTML
