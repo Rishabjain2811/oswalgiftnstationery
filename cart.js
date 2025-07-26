@@ -1,5 +1,6 @@
-// Shared Cart Logic for cart.html
+// Cart page functionality
 
+// Shared cart functions
 function getCart() {
   return JSON.parse(localStorage.getItem('oswal_cart') || '[]');
 }
@@ -11,17 +12,10 @@ function setCart(cart) {
 function updateCartCount() {
   const cart = getCart();
   const cartCount = document.getElementById('cart-count');
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  cartCount.textContent = totalItems;
-  animateCartCount();
-}
-
-function animateCartCount() {
-  const cartCount = document.getElementById('cart-count');
-  cartCount.style.transform = 'scale(1.2)';
-  setTimeout(() => {
-    cartCount.style.transform = 'scale(1)';
-  }, 200);
+  if (cartCount) {
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = totalItems;
+  }
 }
 
 function removeFromCart(productId) {
@@ -35,15 +29,29 @@ function removeFromCart(productId) {
 function renderCart() {
   const cart = getCart();
   const cartItems = document.getElementById('cart-items');
-  if (cart.length === 0) {
-    cartItems.innerHTML = '<p>Your cart is empty</p>';
+  
+  if (!cartItems) {
+    console.error('Cart items container not found!');
     return;
   }
+  
+  if (cart.length === 0) {
+    cartItems.innerHTML = `
+      <div class="empty-cart">
+        <p>🛒 Your cart is empty</p>
+        <p>Add some products to get started!</p>
+        <a href="index.html#featured" class="cta-btn">Browse Products</a>
+      </div>
+    `;
+    return;
+  }
+  
   cartItems.innerHTML = cart.map(item => `
     <div class="cart-item">
       <div class="cart-item-info">
-        <h4>${item.name}</h4>
-        <p>Quantity: ${item.quantity}</p>
+        <h4>${item.name || 'Product'}</h4>
+        <p>Quantity: ${item.quantity || 1}</p>
+        <p class="cart-item-category">Category: ${item.category || 'General'}</p>
       </div>
       <button onclick="removeFromCart(${item.id})" class="remove-btn">Remove</button>
     </div>
@@ -61,10 +69,35 @@ function sendWhatsApp() {
   window.open(whatsappUrl, '_blank');
 }
 
-document.getElementById('send-whatsapp').addEventListener('click', sendWhatsApp);
+// Test function to add sample items to cart
+function addSampleItems() {
+  const sampleItems = [
+    { id: 1, name: "Ring Binder A4", quantity: 2, category: "Ring Binders" },
+    { id: 2, name: "Display File Clear", quantity: 1, category: "Display Files" },
+    { id: 3, name: "Conference Folder", quantity: 3, category: "Conference Folders" }
+  ];
+  
+  setCart(sampleItems);
+  console.log('Sample items added to cart');
+  renderCart();
+  updateCartCount();
+}
 
-// Set active nav link
-function setActiveNavLink() {
+// Initialize cart page
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Cart page loaded');
+  
+  const sendWhatsAppBtn = document.getElementById('send-whatsapp');
+  
+  if (sendWhatsAppBtn) {
+    sendWhatsAppBtn.addEventListener('click', sendWhatsApp);
+  }
+  
+  // Initialize cart
+  renderCart();
+  updateCartCount();
+  
+  // Set active nav link
   const currentPage = window.location.pathname.split('/').pop();
   const navLinks = document.querySelectorAll('.nav-links a');
   navLinks.forEach(link => {
@@ -72,7 +105,14 @@ function setActiveNavLink() {
       link.classList.add('active');
     }
   });
-}
+  
+  // Add sample items if cart is empty (for testing)
+  const cart = getCart();
+  if (cart.length === 0) {
+    console.log('Cart is empty, adding sample items for testing');
+    addSampleItems();
+  }
+});
 
 // Reveal on scroll animation
 function revealOnScroll() {
@@ -87,9 +127,5 @@ function revealOnScroll() {
   });
 }
 
-// Initialize
-renderCart();
-updateCartCount();
-setActiveNavLink();
 window.addEventListener('scroll', revealOnScroll);
 window.addEventListener('load', revealOnScroll); 
